@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AbsensiController;
 use App\Http\Controllers\Api\CutiIzinController;
+use App\Http\Controllers\Api\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('absensi/cuti-izin', [CutiIzinController::class, 'index']);
     Route::post('absensi/cuti-izin', [CutiIzinController::class, 'store']);
+
+
+    // dimatikan dulu karena harus setting docker
+    // Route::get('notifications', [NotificationController::class, 'index']);
+    // Route::post('notifications/{id}/read', [NotificationController::class, 'markAsRead']);
 });

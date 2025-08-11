@@ -4,12 +4,6 @@
 <div class="container my-4">
     <h1 class="mb-4">Daftar Pengajuan Cuti & Izin</h1>
 
-    @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-    @endif
-
     <div class="table-responsive">
         <table class="table table-striped table-bordered align-middle">
             <thead class="table-dark">

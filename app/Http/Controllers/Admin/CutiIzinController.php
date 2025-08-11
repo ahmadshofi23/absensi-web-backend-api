@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CutiIzin;
+use App\Notifications\ApprovalNotification;
 
 class CutiIzinController extends Controller
 {
@@ -34,6 +35,7 @@ class CutiIzinController extends Controller
         // Kirim notifikasi ke user
         $user = $cutiIzin->karyawan->user;
         $pesan = "Pengajuan {$cutiIzin->jenis} Anda telah {$request->status}.";
+        // dimatikan dulu karena harus setting docker
         // $user->notify(new ApprovalNotification($pesan));
 
         return redirect()->route('admin.cuti-izin.index')->with('success', 'Status pengajuan berhasil diperbarui dan notifikasi terkirim.');
