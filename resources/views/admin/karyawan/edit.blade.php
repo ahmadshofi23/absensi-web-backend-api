@@ -1,65 +1,153 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h3>Edit Karyawan</h3>
+<div class="container my-5">
+    <h3 class="mb-4 text-center text-primary fw-bold">Edit Karyawan</h3>
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('admin.karyawan.update', $karyawan->id) }}" method="POST">
+    <form id="editKaryawanForm" action="{{ route('admin.karyawan.update', $karyawan->id) }}" method="POST" class="mx-auto" style="max-width: 600px;" novalidate>
         @csrf
         @method('PUT')
 
         <div class="mb-3">
-            <label>Nama</label>
-            <input type="text" name="name" class="form-control" value="{{ old('name', $karyawan->user->name) }}" required>
+            <label for="name" class="form-label fw-semibold">Nama <span class="text-danger">*</span></label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $karyawan->user->name) }}" required autofocus>
+            <div class="invalid-feedback">Nama wajib diisi.</div>
         </div>
 
         <div class="mb-3">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" value="{{ old('email', $karyawan->user->email) }}" required>
+            <label for="email" class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+            <input type="email" id="email" name="email" class="form-control" value="{{ old('email', $karyawan->user->email) }}" required>
+            <div class="invalid-feedback">Email tidak valid atau kosong.</div>
         </div>
 
         <div class="mb-3">
-            <label>Password (kosongkan jika tidak ingin ganti)</label>
-            <input type="password" name="password" class="form-control">
+            <label for="password" class="form-label fw-semibold">Password <small class="text-muted">(kosongkan jika tidak ingin ganti)</small></label>
+            <input type="password" id="password" name="password" class="form-control" autocomplete="new-password" placeholder="••••••••" minlength="6">
+            <div class="invalid-feedback">Password minimal 6 karakter jika diisi.</div>
         </div>
 
         <div class="mb-3">
-            <label>Konfirmasi Password</label>
-            <input type="password" name="password_confirmation" class="form-control">
+            <label for="password_confirmation" class="form-label fw-semibold">Konfirmasi Password</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" autocomplete="new-password" placeholder="••••••••" minlength="6">
+            <div class="invalid-feedback">Konfirmasi password harus sama dengan password.</div>
         </div>
 
         <div class="mb-3">
-            <label>NIK</label>
-            <input type="text" name="nik" class="form-control" value="{{ old('nik', $karyawan->nik) }}" required>
+            <label for="nik" class="form-label fw-semibold">NIK <span class="text-danger">*</span></label>
+            <input type="text" id="nik" name="nik" class="form-control" value="{{ old('nik', $karyawan->nik) }}" required>
+            <div class="invalid-feedback">NIK wajib diisi.</div>
         </div>
 
         <div class="mb-3">
-            <label>Jabatan</label>
-            <input type="text" name="jabatan" class="form-control" value="{{ old('jabatan', $karyawan->jabatan) }}" required>
+            <label for="jabatan" class="form-label fw-semibold">Jabatan <span class="text-danger">*</span></label>
+            <input type="text" id="jabatan" name="jabatan" class="form-control" value="{{ old('jabatan', $karyawan->jabatan) }}" required>
+            <div class="invalid-feedback">Jabatan wajib diisi.</div>
         </div>
 
         <div class="mb-3">
-            <label>Divisi</label>
-            <input type="text" name="divisi" class="form-control" value="{{ old('divisi', $karyawan->divisi) }}" required>
+            <label for="divisi" class="form-label fw-semibold">Divisi <span class="text-danger">*</span></label>
+            <input type="text" id="divisi" name="divisi" class="form-control" value="{{ old('divisi', $karyawan->divisi) }}" required>
+            <div class="invalid-feedback">Divisi wajib diisi.</div>
         </div>
 
-        <div class="mb-3">
-            <label>No HP</label>
-            <input type="text" name="no_hp" class="form-control" value="{{ old('no_hp', $karyawan->no_hp) }}">
+        <div class="mb-4">
+            <label for="no_hp" class="form-label fw-semibold">No HP</label>
+            <input type="text" id="no_hp" name="no_hp" class="form-control" value="{{ old('no_hp', $karyawan->no_hp) }}">
         </div>
 
-        <button class="btn btn-primary" type="submit">Update</button>
-        <a href="{{ route('admin.karyawan.index') }}" class="btn btn-secondary">Batal</a>
+        <div class="d-flex justify-content-between">
+            <a href="{{ route('admin.karyawan.index') }}" class="btn btn-outline-secondary px-4">Batal</a>
+            <button class="btn btn-primary px-5" type="submit">Update</button>
+        </div>
     </form>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    (() => {
+        const form = document.getElementById('editKaryawanForm');
+        const password = form.password;
+        const passwordConfirmation = form.password_confirmation;
+
+        // Function to check if email format valid
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // Realtime validation handler
+        form.addEventListener('input', e => {
+            const target = e.target;
+
+            if (target.required && !target.value.trim()) {
+                target.classList.add('is-invalid');
+                target.classList.remove('is-valid');
+                return;
+            }
+
+            if (target.type === 'email') {
+                if (!isValidEmail(target.value)) {
+                    target.classList.add('is-invalid');
+                    target.classList.remove('is-valid');
+                    return;
+                }
+            }
+
+            if (target.id === 'password') {
+                if (target.value && target.value.length < 6) {
+                    target.classList.add('is-invalid');
+                    target.classList.remove('is-valid');
+                    return;
+                }
+            }
+
+            if (target.id === 'password_confirmation') {
+                if (password.value !== target.value) {
+                    target.classList.add('is-invalid');
+                    target.classList.remove('is-valid');
+                    return;
+                }
+            }
+
+            target.classList.remove('is-invalid');
+            target.classList.add('is-valid');
+        });
+
+        // On form submit validation
+        form.addEventListener('submit', e => {
+            let valid = true;
+
+            // Check required fields
+            [...form.elements].forEach(el => {
+                if (el.required && !el.value.trim()) {
+                    el.classList.add('is-invalid');
+                    valid = false;
+                }
+            });
+
+            // Email format
+            if (!isValidEmail(form.email.value)) {
+                form.email.classList.add('is-invalid');
+                valid = false;
+            }
+
+            // Password length if filled
+            if (form.password.value && form.password.value.length < 6) {
+                form.password.classList.add('is-invalid');
+                valid = false;
+            }
+
+            // Password confirmation match
+            if (form.password.value !== form.password_confirmation.value) {
+                form.password_confirmation.classList.add('is-invalid');
+                valid = false;
+            }
+
+            if (!valid) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+    })();
+</script>
 @endsection

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CutiIzinController;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +20,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,6 +31,7 @@ Route::get('/dashboard', function () {
 // });
 
 Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(function(){
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('karyawan', \App\Http\Controllers\Admin\KaryawanController::class);
     
     Route::resource('absensi', \App\Http\Controllers\Admin\AbsensiController::class)
