@@ -1,5 +1,11 @@
 <x-guest-layout>
-    <div class="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 px-4">
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+        <div class="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 px-4">
         <div class="max-w-md w-full bg-white dark:bg-gray-900 rounded-xl shadow-xl p-10">
             <!-- Judul -->
             <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-8 text-center tracking-wide">

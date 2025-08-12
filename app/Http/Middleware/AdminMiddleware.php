@@ -18,6 +18,12 @@ class AdminMiddleware
         if(auth()->user() && auth()->user()->role == 'admin'){
             return $next($request);
         }
-        abort(403, 'Unauthorized');
+        // Kalau sudah login tapi bukan admin
+        if(auth()->check()){
+            return redirect()->route('login')->with('error', 'Anda bukan administrator');
+        }
+
+        // Kalau belum login, langsung redirect login
+        return redirect()->route('login');
     }
 }
