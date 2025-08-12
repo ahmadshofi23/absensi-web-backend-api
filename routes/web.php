@@ -4,17 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CutiIzinController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\KaryawanImportExportController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,11 +24,17 @@ Route::get('/', function () {
 // });
 
 Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(function(){
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('absensi/export', [\App\Http\Controllers\Admin\AbsensiController::class, 'export'])->name('absensi.export');
+
+    Route::get('karyawan/export', [KaryawanImportExportController::class, 'export'])->name('karyawan.export');
+    Route::post('karyawan/import', [KaryawanImportExportController::class, 'import'])->name('karyawan.import');
+
     Route::resource('karyawan', \App\Http\Controllers\Admin\KaryawanController::class);
     
     Route::resource('absensi', \App\Http\Controllers\Admin\AbsensiController::class)
-        ->only(['index', 'show']);
+        ->only(['index']);
     
     Route::get('absensi/create', [\App\Http\Controllers\Admin\AbsensiController::class, 'create'])->name('absensi.create');
     Route::post('absensi/store', [\App\Http\Controllers\Admin\AbsensiController::class, 'store'])->name('absensi.store');
@@ -43,6 +42,9 @@ Route::middleware(['auth','admin'])->prefix('admin')->name('admin.')->group(func
     Route::resource('cuti-izin', CutiIzinController::class);
 
     Route::get('absensi/export', [\App\Http\Controllers\Admin\AbsensiController::class, 'export'])->name('absensi.export');
+
+    
 });
+
 
 require __DIR__.'/auth.php';

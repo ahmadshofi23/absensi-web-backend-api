@@ -16,7 +16,8 @@ class Karyawan extends Model
         'jabatan',
         'divisi',
         'no_hp',
-        // tambahkan kolom lain sesuai tabel kamu
+        'kontrak_kerja',
+        'npwp',
     ];
 
     public function user()

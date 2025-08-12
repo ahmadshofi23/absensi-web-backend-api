@@ -4,6 +4,13 @@
 <div class="container py-4">
     <h3 class="mb-4">Data Absensi</h3>
 
+    {{-- Tombol Export Absensi --}}
+    <div class="mb-3 d-flex justify-content-end">
+        <a href="{{ route('admin.absensi.export') }}" class="btn btn-outline-primary btn-sm shadow-sm">
+            <i class="bi bi-file-earmark-arrow-down"></i> Export Absensi
+        </a>
+    </div>
+
     <form method="GET" action="{{ route('admin.absensi.index') }}" class="mb-4">
         <div class="row g-3 align-items-end">
             <div class="col-md-3">

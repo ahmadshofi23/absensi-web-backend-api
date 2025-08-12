@@ -115,6 +115,16 @@ class KaryawanController extends Controller
         $karyawan->jabatan = $request->jabatan;
         $karyawan->divisi = $request->divisi;
         $karyawan->no_hp = $request->no_hp;
+        
+        if ($request->hasFile('kontrak_kerja')) {
+            $path = $request->file('kontrak_kerja')->store('dokumen/kontrak_kerja', 'public');
+            $karyawan->kontrak_kerja = $path;
+        }
+
+        if ($request->hasFile('npwp')) {
+            $path = $request->file('npwp')->store('dokumen/npwp', 'public');
+            $karyawan->npwp = $path;
+        }
         $karyawan->save();
 
         return redirect()->route('karyawan.index')->with('success', 'Data karyawan berhasil diperbarui.');
@@ -128,5 +138,10 @@ class KaryawanController extends Controller
         $karyawan = Karyawan::with('user')->findOrFail($id);
         $karyawan->user->delete(); // delete user otomatis delete karyawan (cascade)
         return redirect()->route('karyawan.index')->with('success', 'Karyawan berhasil dihapus.');
+    }
+
+    public function exports()
+    {
+       return 'test connection';
     }
 }
